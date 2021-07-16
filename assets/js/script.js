@@ -27,7 +27,7 @@ var setTimeClass = function(element, timeIndex) {
 
     var time = moment().set("hour", timeIndex);
     var timeDifference = moment().diff(time, "hours");
-    // apply new class if task is near/over due date
+    
     if (timeDifference === 0) {
         element.addClass("present");
     }
@@ -39,7 +39,8 @@ var setTimeClass = function(element, timeIndex) {
     }
 }
 
-var createCalendar = function(calendarObject) {
+//Function to create the day planner
+var createCalendar = function() {
     var entriesObject = getEntries();
 
     var hourList = $('<ul>');
@@ -60,56 +61,46 @@ var createCalendar = function(calendarObject) {
             var AMPM = 'PM';
         }
 
-        calendarObject[hour+AMPM+'Index'] = i;
-
-        calendarObject[hour+AMPM+'item'] = $('<li>');
-        var item = calendarObject[hour+AMPM+'item'];
+        var item = $('<li>');
         item.addClass('time-block');
         item.addClass('row');
         item.attr('data-timeIndex', i);
         hourList.append(item);
 
-        calendarObject[hour+AMPM+'hourDisplay'] = $('<p>');
-        var hourDisplay = calendarObject[hour+AMPM+'hourDisplay'];
+        var hourDisplay = $('<p>');
         hourDisplay.addClass('hour');
         hourDisplay.text(hour + AMPM);
         hourDisplay.attr('id', 'hour'+i);
         hourDisplay.attr('data-timeIndex', i);
         item.append(hourDisplay);
 
-        calendarObject[hour+AMPM+'entry'] = $('<p>');
-        var entry = calendarObject[hour+AMPM+'entry'];
+        var entry = $('<p>');
         entry.addClass('entry-display');
         entry.text(entriesObject[i]);
         entry.attr('id', 'entry'+i);
         entry.attr('data-timeIndex', i);
         item.append(entry);
 
-        calendarObject[hour+AMPM+'icon'] = $('<button>');
-        var icon = calendarObject[hour+AMPM+'icon'];
-        icon.addClass('saveBtn');
-        icon.addClass('oi oi-calendar');
-        icon.attr('id', 'button'+i);
-        icon.attr('data-timeIndex', i);
-        item.append(icon);
+        var button = $('<button>');
+        button.addClass('saveBtn');
+        button.addClass('oi oi-calendar');
+        button.attr('id', 'button'+i);
+        button.attr('data-timeIndex', i);
+        item.append(button);
 
         setTimeClass(entry, i)
     }
 }
 
-var entriesArray = getEntries();
-var calendarObject = {}
-
+//Initialize content and requisite variables
 $('#currentDay').text(moment().format('dddd, MMMM Do'));
-createCalendar(calendarObject, entriesArray);
+createCalendar();
 
+//Function to add event listener to entry elements
 var addClickEntry = function() {
     $('.entry-display').on("click", function() {
-        // get current text of p element
         var timeIndex = $(this).attr('data-timeIndex');
         var text = $('#entry'+timeIndex).text();
-
-        // replace p element with a new textarea
         var textInput = $("<textarea>")
             .attr('id', 'text'+timeIndex)
             .addClass("form-control")
@@ -120,6 +111,7 @@ var addClickEntry = function() {
     })
 }
 
+//Function to add click listener to save button
 var addSaveEntry = function() {
     $(".saveBtn").on("click", function() {
         var timeIndex = $(this).attr('data-timeIndex');
@@ -141,4 +133,5 @@ var addSaveEntry = function() {
       });
 }
 
+//Add entry click listeners
 addClickEntry();
