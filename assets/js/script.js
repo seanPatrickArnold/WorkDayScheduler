@@ -10,6 +10,7 @@ var getEntries = function() {
     return(entriesObject);
 }
 
+//Function to read entries off the page
 var readEntries = function() {
     entriesObject = {};
     $('.time-block').each(function() {
@@ -19,7 +20,11 @@ var readEntries = function() {
     return(entriesObject)
 }
 
+/*Function to set the time class of an element based on its
+relation to the current time.*/
 var setTimeClass = function(element, timeIndex) {
+    element.removeClass('past present future');
+
     var time = moment().set("hour", timeIndex);
     var timeDifference = moment().diff(time, "hours");
     // apply new class if task is near/over due date
